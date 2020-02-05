@@ -20,6 +20,7 @@ const cart = produce((draft, action) => {
 
       draft.totalAmount += +price.toFixed(2);
       return;
+
     case actions.REMOVE_FROM_CART:
       const { key } = action.cartItem;
       const { quantity, productPrice } = draft.items[key];
@@ -32,8 +33,17 @@ const cart = produce((draft, action) => {
       }
       draft.totalAmount -= +productPrice.toFixed(2);
       return;
+
     case actions.ADD_ORDER:
       return INITIAL_STATES;
+
+    case actions.DELETE_PRODUCT:
+      const { productId } = action;
+      if (draft.items[productId]) {
+        draft.totalAmount -= draft.items[productId].sum;
+        delete draft.items[productId];
+      }
+      return;
   }
 
   return;

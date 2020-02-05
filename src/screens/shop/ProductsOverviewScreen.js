@@ -1,11 +1,19 @@
 import React from "react";
-import { View, Text, StyleSheet, Platform, FlatList } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Button,
+  Platform,
+  FlatList
+} from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 
 import { selectors, actions } from "store";
 import { ProductItem } from "components/shop";
 import { CustomHeaderButton } from "components/UI";
+import Colors from "color";
 
 const ProductsOverviewScreen = ({ navigation }) => {
   const availableProducts = useSelector(selectors.getAvailableProducts);
@@ -29,11 +37,20 @@ const ProductsOverviewScreen = ({ navigation }) => {
       data={availableProducts}
       keyExtractor={item => item.id}
       renderItem={itemData => (
-        <ProductItem
-          itemData={itemData}
-          onDetailView={detailViewHandler}
-          onAddToCart={AddToCartHandler}
-        />
+        <ProductItem itemData={itemData} onSelect={detailViewHandler}>
+          <Button
+            color={Colors.primary}
+            title="Detail View"
+            onPress={() => {
+              detailViewHandler(itemData.item);
+            }}
+          />
+          <Button
+            color={Colors.primary}
+            title="Add to Cart"
+            onPress={() => AddToCartHandler(itemData.item)}
+          />
+        </ProductItem>
       )}
     />
   );

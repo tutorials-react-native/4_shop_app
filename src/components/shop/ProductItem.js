@@ -4,12 +4,15 @@ import { View, Text, StyleSheet, Image, Button } from "react-native";
 import Colors from "colors";
 import { TouchableCmp } from "components";
 
-const ProductItem = ({ itemData, onDetailView, onAddToCart }) => {
+const ProductItem = ({ itemData, onSelect, onLongSelect, children }) => {
   const selectedItem = itemData.item;
   const { title, imageUrl, price } = selectedItem;
   return (
     <View style={styles.product}>
-      <TouchableCmp onPress={() => onDetailView(selectedItem)}>
+      <TouchableCmp
+        onPress={() => onSelect && onSelect(selectedItem)}
+        onLongPress={() => onLongSelect && onLongSelect(selectedItem)}
+      >
         <View>
           <View style={styles.imageContainer}>
             <Image style={styles.image} source={{ uri: imageUrl }} />
@@ -19,20 +22,7 @@ const ProductItem = ({ itemData, onDetailView, onAddToCart }) => {
             <Text style={styles.price}>${price.toFixed(2)}</Text>
           </View>
 
-          <View style={styles.actions}>
-            <Button
-              color={Colors.primary}
-              title="Detail View"
-              onPress={() => {
-                onDetailView(selectedItem);
-              }}
-            />
-            <Button
-              color={Colors.primary}
-              title="Add to Cart"
-              onPress={() => onAddToCart(selectedItem)}
-            />
-          </View>
+          <View style={styles.actions}>{children}</View>
         </View>
       </TouchableCmp>
     </View>

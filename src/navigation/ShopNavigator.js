@@ -1,9 +1,6 @@
 import React from "react";
 import { createStackNavigator } from "react-navigation-stack";
-import {
-  creactDrawerNavigator,
-  createDrawerNavigator
-} from "react-navigation-drawer";
+import { createDrawerNavigator } from "react-navigation-drawer";
 import { createAppContainer } from "react-navigation";
 import { Platform } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
@@ -12,7 +9,9 @@ import {
   ProductsOverviewScreen,
   ProductDetailScreen,
   CartScreen,
-  OrdersScreen
+  OrdersScreen,
+  UserProductsScreen,
+  EditProductScreen
 } from "screens";
 import Colors from "colors";
 
@@ -37,7 +36,7 @@ const ProductsNavigator = createStackNavigator(
     navigationOptions: {
       drawerIcon: drawerConfig => (
         <Ionicons
-          name={Platform.OS === "ios" ? "ios-list" : "md-list"}
+          name={Platform.OS === "ios" ? "ios-cart" : "md-cart"}
           size={23}
           color={drawerConfig.tintColor}
         />
@@ -49,6 +48,25 @@ const ProductsNavigator = createStackNavigator(
 const OrdersNavigator = createStackNavigator(
   {
     OrderList: OrdersScreen
+  },
+  {
+    defaultNavigationOptions: defaultNavOptions,
+    navigationOptions: {
+      drawerIcon: drawerConfig => (
+        <Ionicons
+          name={Platform.OS === "ios" ? "ios-list" : "md-list"}
+          size={23}
+          color={drawerConfig.tintColor}
+        />
+      )
+    }
+  }
+);
+
+const UserProductsNavigator = createStackNavigator(
+  {
+    UserProducts: UserProductsScreen,
+    EditProduct: EditProductScreen
   },
   {
     defaultNavigationOptions: defaultNavOptions,
@@ -67,7 +85,8 @@ const OrdersNavigator = createStackNavigator(
 const ShopNavigator = createDrawerNavigator(
   {
     Product: ProductsNavigator,
-    Orders: OrdersNavigator
+    Orders: OrdersNavigator,
+    UserProducts: UserProductsNavigator
   },
   {
     contentOptions: {
