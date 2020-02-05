@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { selectors } from "store";
 import Colors from "colors";
 import { CartItem } from "components/shop";
+import { Card } from "components/UI";
 import { actions } from "store";
 
 const CartScreen = () => {
@@ -30,7 +31,7 @@ const CartScreen = () => {
 
   return (
     <View style={styles.screen}>
-      <View style={styles.summary}>
+      <Card style={styles.summary}>
         <Text style={styles.totalText}>
           Total:{" "}
           <Text style={styles.totalAmount}>
@@ -43,7 +44,7 @@ const CartScreen = () => {
           disabled={totalAmount === 0}
           onPress={orderHandler}
         />
-      </View>
+      </Card>
       <FlatList
         data={cartItemsArray}
         renderItem={itemData => (
@@ -62,12 +63,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    shadowColor: "black",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.26,
-    shadowRadius: 8,
-    backgroundColor: "white",
-    borderRadius: 10,
     paddingHorizontal: 20,
     paddingVertical: 10,
     marginVertical: 20

@@ -43,6 +43,7 @@ const EditProductScreen = ({ navigation }) => {
         })
       );
     }
+    navigation.goBack();
   }, [productId, title, image, description, price]);
 
   useEffect(() => {

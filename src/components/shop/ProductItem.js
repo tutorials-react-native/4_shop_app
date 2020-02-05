@@ -1,14 +1,14 @@
 import React from "react";
 import { View, Text, StyleSheet, Image, Button } from "react-native";
 
-import Colors from "colors";
 import { TouchableCmp } from "components";
+import { Card } from "components/UI";
 
 const ProductItem = ({ itemData, onSelect, onLongSelect, children }) => {
   const selectedItem = itemData.item;
   const { title, imageUrl, price } = selectedItem;
   return (
-    <View style={styles.product}>
+    <Card style={styles.product}>
       <TouchableCmp
         onPress={() => onSelect && onSelect(selectedItem)}
         onLongPress={() => onLongSelect && onLongSelect(selectedItem)}
@@ -25,21 +25,14 @@ const ProductItem = ({ itemData, onSelect, onLongSelect, children }) => {
           <View style={styles.actions}>{children}</View>
         </View>
       </TouchableCmp>
-    </View>
+    </Card>
   );
 };
 
 const styles = StyleSheet.create({
   product: {
-    shadowColor: "black",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.26,
-    shadowRadius: 8,
-    elevation: 5,
-    borderRadius: 10,
     height: 300,
-    margin: 20,
-    backgroundColor: "white"
+    margin: 20
   },
 
   imageContainer: {
