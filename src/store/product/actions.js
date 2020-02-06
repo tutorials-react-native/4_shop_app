@@ -14,17 +14,20 @@ export const createProduct = ({
   imageUrl,
   description,
   price
-}) => ({
-  type: CREATE_PRODUCT,
-  product: {
-    id,
-    ownerId,
-    title,
-    imageUrl,
-    description,
-    price
-  }
-});
+}) => dispatch => {
+  fetch();
+  dispatch({
+    type: CREATE_PRODUCT,
+    product: {
+      id,
+      ownerId,
+      title,
+      imageUrl,
+      description,
+      price
+    }
+  });
+};
 
 export const updateProduct = ({
   id,
