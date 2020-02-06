@@ -1,9 +1,17 @@
-import React, { useState, useEffect, useCallback } from "react";
-import { View, Text, TextInput, StyleSheet, Platform } from "react-native";
+import React, { useState, useEffect, useCallback, useReducer } from "react";
+import {
+  ScrollView,
+  StyleSheet,
+  Platform,
+  Alert,
+  KeyboardAvoidingView
+} from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
+import produce from "immer";
 
-import { CustomHeaderButton } from "components/UI";
+import { CustomHeaderButton, Card } from "components/UI";
+import { Input } from "components/shop";
 import { selectors, actions } from "store";
 
 const EditProductScreen = ({ navigation }) => {
@@ -11,75 +19,127 @@ const EditProductScreen = ({ navigation }) => {
   const editedProduct = useSelector(selectors.getUserProductById(productId));
   const dispatch = useDispatch();
 
-  const [title, setTitle] = useState(productId ? editedProduct.title : "");
-  const [image, setImage] = useState(productId ? editedProduct.imageUrl : "");
-  const [description, setDescription] = useState(
-    productId ? editedProduct.description : ""
-  );
-  const [price, setPrice] = useState(
-    productId ? editedProduct.price.toString() : ""
+  const FORM_INPUT_UPDATE = "FORM_INPUT_UPDATE";
+  const formReduer = produce((draft, action) => {
+    switch (action.type) {
+      case FORM_INPUT_UPDATE:
+        const { value, isValid, input } = action;
+        draft.inputValues[input] = value;
+        draft.inputValidates[input] = isValid;
+        draft.formIsValid = Object.values(draft.inputValidates).reduce(
+          (FormValid, inputValid) => FormValid && inputValid
+        );
+        break;
+    }
+    return;
+  });
+
+  const [formState, dispatchFormState] = useReducer(formReduer, {
+    inputValues: {
+      title: productId ? editedProduct.title : "",
+      image: productId ? editedProduct.imageUrl : "",
+      description: productId ? editedProduct.description : "",
+      price: ""
+    },
+    inputValidates: {
+      title: productId ? true : false,
+      image: productId ? true : false,
+      description: productId ? true : false,
+      price: productId ? true : false
+    },
+    formIsValid: false
+  });
+
+  const { title, image, description, price } = formState.inputValues;
+  const { inputValidates, formIsValid } = formState;
+
+  const inputTextChangeHandler = useCallback(
+    (id, value, isValid) => {
+      dispatchFormState({ type: FORM_INPUT_UPDATE, value, isValid, input: id });
+    },
+    [dispatchFormState]
   );
 
   const submitHandler = useCallback(() => {
-    if (productId) {
-      dispatch(
-        actions.updateProduct({
-          id: productId,
-          ownerId: "u1",
-          title,
-          imageUrl: image,
-          description
-        })
-      );
+    if (!formIsValid) {
+      Alert.alert("Wrong input", "Check your input fields", [{ text: "Okay" }]);
     } else {
-      dispatch(
-        actions.createProduct({
-          id: new Date().toString(),
-          ownerId: "u1",
-          title,
-          imageUrl: image,
-          description,
-          price: +price
-        })
-      );
+      if (productId) {
+        dispatch(
+          actions.updateProduct({
+            id: productId,
+            ownerId: "u1",
+            title,
+            imageUrl: image,
+            description
+          })
+        );
+      } else {
+        dispatch(
+          actions.createProduct({
+            id: new Date().toString(),
+            ownerId: "u1",
+            title,
+            imageUrl: image,
+            description,
+            price: +price
+          })
+        );
+      }
+      navigation.goBack();
     }
-    navigation.goBack();
-  }, [productId, title, image, description, price]);
+  }, [productId, formState]);
 
   useEffect(() => {
     navigation.setParams({ submit: submitHandler });
   }, [submitHandler]);
 
   return (
-    <View style={styles.screen}>
-      <View style={styles.formControl}>
-        <Text style={styles.label}>Title</Text>
-        <TextInput style={styles.input} value={title} onChangeText={setTitle} />
-      </View>
-      <View style={styles.formControl}>
-        <Text style={styles.label}>Image</Text>
-        <TextInput style={styles.input} value={image} onChangeText={setImage} />
-      </View>
-      <View style={styles.formControl}>
-        <Text style={styles.label}>Description</Text>
-        <TextInput
-          style={styles.input}
-          value={description}
-          onChangeText={setDescription}
-          multiline
-        />
-      </View>
-      {!productId && (
-        <View style={styles.formControl}>
-          <Text style={styles.label}>Price</Text>
-          <TextInput
-            style={styles.input}
-            value={price}
-            onChangeText={setPrice}
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior="padding"
+      keyboardVerticalOffset={100}
+    >
+      <Card style={styles.screen}>
+        <ScrollView>
+          <Input
+            id="title"
+            label="Title"
+            errorMessage="Title is wrong!"
+            initialValue={title}
+            initialValidate={inputValidates.title}
+            onInputTextChange={inputTextChangeHandler}
           />
-        </View>
-      )}
-    </View>
+          <Input
+            id="image"
+            label="Image Url"
+            errorMessage="Image url is wrong!"
+            initialValue={image}
+            initialValidate={inputValidates.image}
+            onInputTextChange={inputTextChangeHandler}
+          />
+          <Input
+            id="description"
+            label="Description"
+            errorMessage="Description is wrong!"
+            initialValue={description}
+            initialValidate={inputValidates.description}
+            onInputTextChange={inputTextChangeHandler}
+            multiline
+          />
+          {!productId && (
+            <Input
+              id="price"
+              label="Price"
+              errorMessage="Price is wrong!"
+              initialValue={price}
+              initialValidate={inputValidates.price}
+              onInputTextChange={inputTextChangeHandler}
+            />
+          )}
+        </ScrollView>
+      </Card>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -106,28 +166,7 @@ const styles = StyleSheet.create({
     margin: 20,
     flex: 1,
 
-    backgroundColor: "white",
-    borderRadius: 10,
-    shadowRadius: 8,
-    shadowOpacity: 0.26,
-    shadowOffset: { width: 0, height: 2 },
-    shadowColor: "black",
     padding: 20
-  },
-  formControl: {
-    justifyContent: "center",
-    marginVertical: 20
-  },
-  label: {
-    fontSize: 16,
-    fontFamily: "open-sans-bold"
-  },
-  input: {
-    borderBottomColor: "#ccc",
-    borderBottomWidth: 1,
-    paddingVertical: 5,
-    paddingHorizontal: 2,
-    fontFamily: "open-sans"
   }
 });
 
