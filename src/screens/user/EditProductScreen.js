@@ -77,7 +77,6 @@ const EditProductScreen = ({ navigation }) => {
       } else {
         dispatch(
           actions.createProduct({
-            id: new Date().toString(),
             ownerId: "u1",
             title,
             imageUrl: image,

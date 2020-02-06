@@ -9,7 +9,8 @@ module.exports = function(api) {
           root: ["./src"],
           alias: {
             assets: ["./assets"],
-            colors: ["./src/constants/colors"]
+            colors: ["./src/constants/colors"],
+            api: ["./src/api/config.json"]
           }
         }
       ]

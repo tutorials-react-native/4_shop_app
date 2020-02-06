@@ -11,6 +11,12 @@ const INITIAL_STATE = {
 
 const product = produce((draft, action) => {
   switch (action.type) {
+    case actions.SET_PRODUCTS: {
+      const { products } = action;
+      draft.availableProducts = products;
+      draft.userProducts = products.filter(product => product.ownerId === "u1");
+      return;
+    }
     case actions.DELETE_PRODUCT: {
       const { productId } = action;
       return {

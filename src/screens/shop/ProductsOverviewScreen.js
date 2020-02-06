@@ -1,11 +1,12 @@
-import React from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import {
   View,
   Text,
   StyleSheet,
   Button,
   Platform,
-  FlatList
+  FlatList,
+  ActivityIndicator
 } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
@@ -18,6 +19,19 @@ import Colors from "color";
 const ProductsOverviewScreen = ({ navigation }) => {
   const availableProducts = useSelector(selectors.getAvailableProducts);
   const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState();
+
+  const loadProducts = useCallback(async () => {
+    await dispatch(actions.fetchProduct()).catch(error => {
+      setError(error);
+    });
+    setIsLoading(false);
+  }, [dispatch, setIsLoading]);
+
+  useEffect(() => {
+    loadProducts();
+  }, [dispatch, loadProducts]);
 
   const detailViewHandler = selectedProduct => {
     navigation.navigate({
@@ -31,6 +45,30 @@ const ProductsOverviewScreen = ({ navigation }) => {
   const AddToCartHandler = selectedProduct => {
     dispatch(actions.addToCart(selectedProduct));
   };
+
+  if (isLoading) {
+    return (
+      <View style={styles.centered}>
+        <ActivityIndicator size="large" color={Colors.primary} />
+      </View>
+    );
+  }
+
+  if (!isLoading && availableProducts.length === 0) {
+    return (
+      <View style={styles.centered}>
+        <Text>No products. Start adding it!</Text>
+      </View>
+    );
+  }
+
+  if (error) {
+    return (
+      <View style={styles.centered}>
+        <Text>error occured!</Text>
+      </View>
+    );
+  }
 
   return (
     <FlatList
@@ -76,6 +114,14 @@ ProductsOverviewScreen.navigationOptions = ({ navigation }) => ({
       />
     </HeaderButtons>
   )
+});
+
+const styles = StyleSheet.create({
+  centered: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center"
+  }
 });
 
 export default ProductsOverviewScreen;
