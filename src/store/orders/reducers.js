@@ -13,7 +13,10 @@ const orders = produce((draft, action) => {
       const { items, totalAmount, date, id } = action;
       const newOrder = new Order(id, items, totalAmount, date);
       draft.orders.push(newOrder);
-      break;
+      return;
+    case actions.SET_ORDERS:
+      draft.orders = action.orders;
+      return;
   }
   return;
 }, INITIAL_STATES);

@@ -9,7 +9,7 @@ class Order {
     this.date = date;
   }
   get readableDate() {
-    return moment(this.data)
+    return moment(this.date)
       .locale("ko")
       .format("MMMM Do YYYY, h:mm A");
   }

@@ -18,5 +18,11 @@ export const api = {
       .catch(error => {
         throw error;
       });
+  },
+
+  getOrders: async () => {
+    return await firebaseClient.get("orders/u1.json").catch(error => {
+      throw error;
+    });
   }
 };
