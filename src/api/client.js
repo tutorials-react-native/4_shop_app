@@ -1,9 +1,16 @@
 import axios from "axios";
-import { baseURL } from "./config.json";
+import { baseURL, firebaseSignUpURL, firebaseLoginURL } from "./config.json";
 
 const firebaseClient = axios.create({
-  baseURL,
-  headers: { "Content-Type": "application/json" }
+  baseURL
 });
 
-export { firebaseClient };
+const firebaseSignUpClient = axios.create({
+  baseURL: firebaseSignUpURL
+});
+
+const firebaseLoginClient = axios.create({
+  baseURL: firebaseLoginURL
+});
+
+export { firebaseClient, firebaseSignUpClient, firebaseLoginClient };
