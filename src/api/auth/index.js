@@ -30,8 +30,13 @@ export const api = {
         }
       )
       .catch(error => {
-        console.log("error message", error.message);
-        throw error;
+        const errorId = error.response.data.error.errors[0].message;
+        let message = "Something went wrong!";
+        if (errorId === "INVALID_EMAIL") {
+          message = "Wrong Email";
+        }
+
+        throw new Error(message);
       });
   }
 };
