@@ -10,7 +10,7 @@ module.exports = function(api) {
           alias: {
             assets: ["./assets"],
             colors: ["./src/constants/colors"],
-            api: ["./src/api/config.json"]
+            apiConfig: ["./src/api/config.json"]
           }
         }
       ]

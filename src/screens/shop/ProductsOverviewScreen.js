@@ -19,11 +19,13 @@ import Colors from "color";
 const ProductsOverviewScreen = ({ navigation }) => {
   const availableProducts = useSelector(selectors.getAvailableProducts);
   const dispatch = useDispatch();
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
 
   const loadProducts = useCallback(async () => {
+    setIsLoading(true);
     await dispatch(actions.fetchProduct()).catch(error => {
+      console.log(error);
       setError(error);
     });
     setIsLoading(false);
@@ -71,6 +73,7 @@ const ProductsOverviewScreen = ({ navigation }) => {
     return (
       <View style={styles.centered}>
         <Text>error occured!</Text>
+        <Button title="Try again" onPress={loadProducts} />
       </View>
     );
   }
