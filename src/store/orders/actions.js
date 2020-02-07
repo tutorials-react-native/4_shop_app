@@ -13,7 +13,7 @@ export const fetchOrders = () => async dispatch => {
           key,
           resData[key].items,
           resData[key].totalAmount,
-          new Date(resData.date)
+          new Date(resData[key].date)
         );
       })
     : [];
