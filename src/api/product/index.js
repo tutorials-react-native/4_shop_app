@@ -7,12 +7,12 @@ export const api = {
     });
   },
 
-  createProduct: async createProductInfo => {
+  createProduct: async ({ createBody, token }) => {
     return await firebaseClient
       .post(
-        "products.json",
+        `products.json?auth=${token}`,
         {
-          ...createProductInfo
+          ...createBody
         },
         {
           headers: { "Content-Type": "application/json" }
@@ -23,18 +23,12 @@ export const api = {
       });
   },
 
-  updateProduct: async updateProductInfo => {
-    const patchBody = {
-      ownerId: updateProductInfo.ownerId,
-      title: updateProductInfo.title,
-      imageUrl: updateProductInfo.imageUrl,
-      description: updateProductInfo.description
-    };
+  updateProduct: async ({ updateBody, token }) => {
     return await firebaseClient
       .patch(
-        `products/${updateProductInfo.id}.json`,
+        `products/${updateProductInfo.id}.json?auth=${token}`,
         {
-          ...patchBody
+          ...updateBody
         },
         {
           headers: { "Content-Type": "application/json" }
@@ -44,9 +38,9 @@ export const api = {
         throw error;
       });
   },
-  deleteProduct: async productId => {
+  deleteProduct: async ({ productId, token }) => {
     return await firebaseClient
-      .delete(`products/${productId}.json`)
+      .delete(`products/${productId}.json?auth=${token}`)
       .catch(error => {
         throw error;
       });

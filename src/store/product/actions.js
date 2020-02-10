@@ -1,6 +1,3 @@
-import axios from "axios";
-
-import { baseURL } from "apiConfig";
 import { productApi } from "api";
 
 export const DELETE_PRODUCT = "DELETE_PRODUCT";
@@ -25,11 +22,13 @@ export const setProduct = products => ({
   products
 });
 
-export const deleteProduct = productId => async dispatch => {
-  await productApi.deleteProduct(productId);
+export const deleteProduct = productId => async (dispatch, getState) => {
+  const token = getState().auth.token;
+  await productApi.deleteProduct({ productId, token });
   dispatch({
     type: DELETE_PRODUCT,
-    productId
+    productId,
+    token
   });
 };
 
@@ -39,13 +38,11 @@ export const createProduct = ({
   imageUrl,
   description,
   price
-}) => async dispatch => {
+}) => async (dispatch, getState) => {
+  const token = getState().auth.token;
   const response = await productApi.createProduct({
-    ownerId,
-    title,
-    imageUrl,
-    description,
-    price
+    createBody: { ownerId, title, imageUrl, description, price },
+    token
   });
   const resData = response.data;
   dispatch({
@@ -67,13 +64,11 @@ export const updateProduct = ({
   title,
   imageUrl,
   description
-}) => async dispatch => {
+}) => async (dispatch, getState) => {
+  const token = getState().auth.token;
   await productApi.updateProduct({
-    id,
-    ownerId,
-    title,
-    imageUrl,
-    description
+    updateBody: { id, ownerId, title, imageUrl, description },
+    token
   });
 
   dispatch({

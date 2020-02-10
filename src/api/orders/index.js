@@ -1,11 +1,10 @@
 import { firebaseClient } from "../client";
 
 export const api = {
-  createOrder: async (items, totalAmount) => {
-    console.log("here");
+  createOrder: async ({ items, totalAmount, token }) => {
     return await firebaseClient
       .post(
-        "orders/u1.json",
+        `orders/u1.json?auth=${token}`,
         {
           items,
           totalAmount,

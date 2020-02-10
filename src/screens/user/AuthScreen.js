@@ -35,7 +35,7 @@ const formReducer = produce((draft, action) => {
   return;
 });
 
-const AuthScreen = () => {
+const AuthScreen = ({ navigation }) => {
   const [isSignUp, setIsSignUp] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
@@ -74,10 +74,11 @@ const AuthScreen = () => {
       } else {
         await dispatch(actions.login(email, password));
       }
+      navigation.navigate({ routeName: "Shop" });
     } catch (error) {
       setError(error);
+      setIsLoading(false);
     }
-    setIsLoading(false);
   };
 
   return (

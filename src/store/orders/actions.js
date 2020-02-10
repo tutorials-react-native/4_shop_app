@@ -24,8 +24,9 @@ export const setOrders = orders => ({
   type: SET_ORDERS,
   orders
 });
-export const addOrder = (items, totalAmount) => async dispatch => {
-  const response = await orderApi.createOrder(items, totalAmount);
+export const addOrder = (items, totalAmount) => async (dispatch, getState) => {
+  const token = getState().auth.token;
+  const response = await orderApi.createOrder({ items, totalAmount, token });
   const resData = response.data;
   dispatch({
     type: ADD_ORDER,
