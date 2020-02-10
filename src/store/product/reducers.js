@@ -5,16 +5,18 @@ import Product from "data/models/product";
 import { actions } from "store";
 
 const INITIAL_STATE = {
-  availableProducts: PRODUCTS,
-  userProducts: PRODUCTS.filter(product => product.ownerId === "u1")
+  availableProducts: [],
+  userProducts: []
 };
 
 const product = produce((draft, action) => {
   switch (action.type) {
     case actions.SET_PRODUCTS: {
-      const { products } = action;
+      const { products, userId } = action;
       draft.availableProducts = products;
-      draft.userProducts = products.filter(product => product.ownerId === "u1");
+      draft.userProducts = products.filter(
+        product => product.ownerId === userId
+      );
       return;
     }
     case actions.DELETE_PRODUCT: {

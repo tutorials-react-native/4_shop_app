@@ -26,7 +26,7 @@ export const api = {
   updateProduct: async ({ updateBody, token }) => {
     return await firebaseClient
       .patch(
-        `products/${updateProductInfo.id}.json?auth=${token}`,
+        `products/${updateBody.id}.json?auth=${token}`,
         {
           ...updateBody
         },

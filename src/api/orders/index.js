@@ -1,10 +1,10 @@
 import { firebaseClient } from "../client";
 
 export const api = {
-  createOrder: async ({ items, totalAmount, token }) => {
+  createOrder: async ({ items, totalAmount, token, userId }) => {
     return await firebaseClient
       .post(
-        `orders/u1.json?auth=${token}`,
+        `orders/${userId}.json?auth=${token}`,
         {
           items,
           totalAmount,
@@ -19,8 +19,8 @@ export const api = {
       });
   },
 
-  getOrders: async () => {
-    return await firebaseClient.get("orders/u1.json").catch(error => {
+  getOrders: async userId => {
+    return await firebaseClient.get(`orders/${userId}.json`).catch(error => {
       throw error;
     });
   }

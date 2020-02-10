@@ -12,7 +12,8 @@ import {
   OrdersScreen,
   UserProductsScreen,
   EditProductScreen,
-  AuthScreen
+  AuthScreen,
+  StartupScreen
 } from "screens";
 import Colors from "colors";
 
@@ -105,9 +106,15 @@ const AuthStackNavigator = createStackNavigator(
   }
 );
 
-const MainNavigator = createSwitchNavigator({
-  Auth: AuthStackNavigator,
-  Shop: ShopNavigator
-});
+const MainNavigator = createSwitchNavigator(
+  {
+    Startup: StartupScreen,
+    Auth: AuthStackNavigator,
+    Shop: ShopNavigator
+  },
+  {
+    initialRouteName: "Startup"
+  }
+);
 
 export default createAppContainer(MainNavigator);

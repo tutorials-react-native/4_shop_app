@@ -9,11 +9,7 @@ const INITIAL_STATES = {
 
 const auth = produce((draft, action) => {
   switch (action.type) {
-    case actions.SIGN_UP:
-      draft.token = action.token;
-      draft.userId = action.userId;
-      return;
-    case actions.LOG_IN:
+    case actions.AUTHENTICATE:
       draft.token = action.token;
       draft.userId = action.userId;
       return;

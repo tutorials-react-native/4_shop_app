@@ -78,7 +78,6 @@ const EditProductScreen = ({ navigation }) => {
         await dispatch(
           actions.updateProduct({
             id: productId,
-            ownerId: "u1",
             title,
             imageUrl: image,
             description
@@ -87,7 +86,6 @@ const EditProductScreen = ({ navigation }) => {
       } else {
         await dispatch(
           actions.createProduct({
-            ownerId: "u1",
             title,
             imageUrl: image,
             description,
