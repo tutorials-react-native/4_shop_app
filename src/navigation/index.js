@@ -1,3 +1,4 @@
 import ShopNavigator from "./ShopNavigator";
+import NavigationWrapper from "./NavigationWrapper";
 
-export { ShopNavigator };
+export { ShopNavigator, NavigationWrapper };

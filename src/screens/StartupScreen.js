@@ -19,12 +19,14 @@ const StartupScreen = ({ navigation }) => {
       if (authData) {
         const parsedAuthData = JSON.parse(authData);
         const { token, userId, expireDate } = parsedAuthData;
+        const expireTime =
+          new Date(expireDate).getTime() - new Date().getTime();
 
         if (new Date(expireDate) <= new Date() || !token || !userId) {
           navigation.navigate("Auth");
         }
 
-        dispatch(actions.authenticate(token, userId));
+        dispatch(actions.authenticate({ token, userId, expireTime }));
         navigation.navigate("Shop");
       } else {
         navigation.navigate("Auth");

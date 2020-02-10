@@ -5,31 +5,19 @@ import { authApi } from "api";
 export const AUTHENTICATE = "AUTHENTICATE";
 export const LOG_OUT = "LOG_OUT";
 
-export const signUp = (email, password) => async dispatch => {
-  const response = await authApi.signUp(email, password);
-  const resData = response.data;
-  const { idToken, localId, expiresIn } = resData;
-  dispatch(authenticate({ token: idToken, userId: localId }));
-  storeAuthToStorage(idToken, localId, expiresIn);
+let timer;
+
+export const logOut = () => dispatch => {
+  clearTimeout(timer);
+  AsyncStorage.removeItem("authData");
+  return dispatch({ type: LOG_OUT });
 };
 
-export const login = (email, password) => async dispatch => {
-  const response = await authApi.login(email, password);
-  const resData = response.data;
-  const { idToken, localId, expiresIn } = resData;
-  dispatch(authenticate({ token: idToken, userId: localId }));
-  storeAuthToStorage(idToken, localId, expiresIn);
+export const setAuthExpireTime = expireTime => dispatch => {
+  timer = setTimeout(() => {
+    dispatch(logOut());
+  }, expireTime);
 };
-
-export const authenticate = (token, userId) => ({
-  type: AUTHENTICATE,
-  token,
-  userId
-});
-
-export const logOut = () => ({
-  type: LOG_OUT
-});
 
 export const storeAuthToStorage = (token, userId, expiresIn) => {
   const expireDate = new Date(
@@ -43,4 +31,41 @@ export const storeAuthToStorage = (token, userId, expiresIn) => {
       expireDate
     })
   );
+};
+
+export const signUp = (email, password) => async dispatch => {
+  const response = await authApi.signUp(email, password);
+  const resData = response.data;
+  const { idToken, localId, expiresIn } = resData;
+  dispatch(
+    authenticate({
+      token: idToken,
+      userId: localId,
+      expireTime: expiresIn * 1000
+    })
+  );
+  storeAuthToStorage(idToken, localId, expiresIn);
+};
+
+export const login = (email, password) => async dispatch => {
+  const response = await authApi.login(email, password);
+  const resData = response.data;
+  const { idToken, localId, expiresIn } = resData;
+  dispatch(
+    authenticate({
+      token: idToken,
+      userId: localId,
+      expireTime: expiresIn * 1000
+    })
+  );
+  storeAuthToStorage(idToken, localId, expiresIn);
+};
+
+export const authenticate = ({ token, userId, expireTime }) => dispatch => {
+  dispatch(setAuthExpireTime(expireTime));
+  dispatch({
+    type: AUTHENTICATE,
+    token,
+    userId
+  });
 };
