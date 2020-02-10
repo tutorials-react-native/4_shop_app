@@ -7,32 +7,6 @@ export const LOG_OUT = "LOG_OUT";
 
 let timer;
 
-export const logOut = () => dispatch => {
-  clearTimeout(timer);
-  AsyncStorage.removeItem("authData");
-  return dispatch({ type: LOG_OUT });
-};
-
-export const setAuthExpireTime = expireTime => dispatch => {
-  timer = setTimeout(() => {
-    dispatch(logOut());
-  }, expireTime);
-};
-
-export const storeAuthToStorage = (token, userId, expiresIn) => {
-  const expireDate = new Date(
-    new Date().getTime() + expiresIn * 1000
-  ).toISOString();
-  AsyncStorage.setItem(
-    "authData",
-    JSON.stringify({
-      token,
-      userId,
-      expireDate
-    })
-  );
-};
-
 export const signUp = (email, password) => async dispatch => {
   const response = await authApi.signUp(email, password);
   const resData = response.data;
@@ -68,4 +42,30 @@ export const authenticate = ({ token, userId, expireTime }) => dispatch => {
     token,
     userId
   });
+};
+
+export const logOut = () => {
+  clearTimeout(timer);
+  AsyncStorage.removeItem("authData");
+  return { type: LOG_OUT };
+};
+
+export const setAuthExpireTime = expireTime => dispatch => {
+  timer = setTimeout(() => {
+    dispatch(logOut());
+  }, expireTime);
+};
+
+export const storeAuthToStorage = (token, userId, expiresIn) => {
+  const expireDate = new Date(
+    new Date().getTime() + expiresIn * 1000
+  ).toISOString();
+  AsyncStorage.setItem(
+    "authData",
+    JSON.stringify({
+      token,
+      userId,
+      expireDate
+    })
+  );
 };
