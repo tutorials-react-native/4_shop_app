@@ -3,6 +3,7 @@ import { AsyncStorage } from "react-native";
 import { authApi } from "api";
 
 export const AUTHENTICATE = "AUTHENTICATE";
+export const LOG_OUT = "LOG_OUT";
 
 export const signUp = (email, password) => async dispatch => {
   const response = await authApi.signUp(email, password);
@@ -24,6 +25,10 @@ export const authenticate = (token, userId) => ({
   type: AUTHENTICATE,
   token,
   userId
+});
+
+export const logOut = () => ({
+  type: LOG_OUT
 });
 
 export const storeAuthToStorage = (token, userId, expiresIn) => {

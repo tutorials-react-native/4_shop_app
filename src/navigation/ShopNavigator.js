@@ -1,8 +1,9 @@
 import React from "react";
+import { useDispatch } from "react-redux";
 import { createStackNavigator } from "react-navigation-stack";
-import { createDrawerNavigator } from "react-navigation-drawer";
+import { createDrawerNavigator, DrawerItems } from "react-navigation-drawer";
 import { createAppContainer, createSwitchNavigator } from "react-navigation";
-import { Platform } from "react-native";
+import { Platform, View, Button, SafeAreaView } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
 import {
@@ -16,6 +17,7 @@ import {
   StartupScreen
 } from "screens";
 import Colors from "colors";
+import { actions } from "store";
 
 const defaultNavOptions = {
   headerStyle: {
@@ -93,6 +95,23 @@ const ShopNavigator = createDrawerNavigator(
   {
     contentOptions: {
       activeTintColor: Colors.primary
+    },
+    contentComponent: props => {
+      const dispatch = useDispatch();
+      return (
+        <View style={{ flex: 1, paddingTop: 20 }}>
+          <SafeAreaView forceInset={{ top: "always", horizontal: "never" }}>
+            <DrawerItems {...props} />
+            <Button
+              title="LOG OUT"
+              onPress={() => {
+                dispatch(actions.logOut());
+                props.navigation.navigate("Auth");
+              }}
+            />
+          </SafeAreaView>
+        </View>
+      );
     }
   }
 );

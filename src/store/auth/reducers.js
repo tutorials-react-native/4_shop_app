@@ -13,6 +13,8 @@ const auth = produce((draft, action) => {
       draft.token = action.token;
       draft.userId = action.userId;
       return;
+    case actions.LOG_OUT:
+      return INITIAL_STATES;
   }
   return;
 }, INITIAL_STATES);
