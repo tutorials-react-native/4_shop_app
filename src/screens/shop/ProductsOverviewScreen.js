@@ -34,7 +34,7 @@ const ProductsOverviewScreen = ({ navigation }) => {
 
   useEffect(() => {
     const focusListener = navigation.addListener("willFocus", loadProducts);
-    return () => focusListener.remove();
+    return () => focusListener;
   });
 
   useEffect(() => {
@@ -108,7 +108,7 @@ const ProductsOverviewScreen = ({ navigation }) => {
   );
 };
 
-ProductsOverviewScreen.navigationOptions = ({ navigation }) => ({
+export const screenOptions = ({ navigation }) => ({
   headerTitle: "All Products",
   headerLeft: () => (
     <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>

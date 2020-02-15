@@ -1,20 +1,19 @@
-import React, { useEffect, useRef } from "react";
+import React from "react";
 import { useSelector } from "react-redux";
-import { NavigationActions } from "react-navigation";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
 
-import ShopNavigator from "./ShopNavigator";
 import { selectors } from "store";
+import { ProductsNavigator } from "navigation/ShopNavigator";
 
 const NavigationWrapper = props => {
-  const nav = useRef();
   const isAuth = useSelector(selectors.isAuth);
-  console.log("isAuth", isAuth);
-  useEffect(() => {
-    if (!isAuth) {
-      nav.current.dispatch(NavigationActions.navigate({ routeName: "Auth" }));
-    }
-  }, [isAuth]);
-  return <ShopNavigator ref={nav} />;
+
+  return (
+    <NavigationContainer>
+      <ProductsNavigator />
+    </NavigationContainer>
+  );
 };
 
 export default NavigationWrapper;
