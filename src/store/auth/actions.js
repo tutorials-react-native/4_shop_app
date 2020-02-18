@@ -4,8 +4,13 @@ import { authApi } from "api";
 
 export const AUTHENTICATE = "AUTHENTICATE";
 export const LOG_OUT = "LOG_OUT";
+export const SET_DID_TRY_AL = "SET_DID_TRY_AL";
 
 let timer;
+
+export const setDidTryAl = () => ({
+  type: SET_DID_TRY_AL
+});
 
 export const signUp = (email, password) => async dispatch => {
   const response = await authApi.signUp(email, password);

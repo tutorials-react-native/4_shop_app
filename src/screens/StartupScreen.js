@@ -23,13 +23,15 @@ const StartupScreen = ({ navigation }) => {
           new Date(expireDate).getTime() - new Date().getTime();
 
         if (new Date(expireDate) <= new Date() || !token || !userId) {
-          navigation.navigate("Auth");
+          dispatch(actions.setDidTryAl());
+          // navigation.navigate("Auth");
         }
 
         dispatch(actions.authenticate({ token, userId, expireTime }));
-        navigation.navigate("Shop");
+        // navigation.navigate("Shop");
       } else {
-        navigation.navigate("Auth");
+        // navigation.navigate("Auth");
+        dispatch(actions.setDidTryAl());
       }
     };
 

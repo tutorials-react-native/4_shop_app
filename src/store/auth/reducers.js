@@ -4,7 +4,8 @@ import { actions } from "store";
 
 const INITIAL_STATES = {
   token: null,
-  userId: null
+  userId: null,
+  triedAutoLogin: false
 };
 
 const auth = produce((draft, action) => {
@@ -12,9 +13,13 @@ const auth = produce((draft, action) => {
     case actions.AUTHENTICATE:
       draft.token = action.token;
       draft.userId = action.userId;
+      draft.triedAutoLogin = false;
       return;
     case actions.LOG_OUT:
-      return INITIAL_STATES;
+      return { ...INITIAL_STATES, triedAutoLogin: true };
+    case actions.SET_DID_TRY_AL:
+      draft.triedAutoLogin = true;
+      return;
   }
   return;
 }, INITIAL_STATES);

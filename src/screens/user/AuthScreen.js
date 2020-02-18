@@ -74,7 +74,7 @@ const AuthScreen = ({ navigation }) => {
       } else {
         await dispatch(actions.login(email, password));
       }
-      navigation.navigate({ routeName: "Shop" });
+      // navigation.navigate({ routeName: "Shop" });
     } catch (error) {
       setError(error);
       setIsLoading(false);
@@ -142,7 +142,7 @@ const AuthScreen = ({ navigation }) => {
   );
 };
 
-AuthScreen.navigationOptions = {
+AuthScreen.screenOptions = {
   headerTitle: "Authenticate"
 };
 

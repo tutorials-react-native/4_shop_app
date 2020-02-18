@@ -4,14 +4,18 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 
 import { selectors } from "store";
-import { ProductsNavigator } from "navigation/ShopNavigator";
+import { ShopNavigator, AuthNavigator } from "navigation/ShopNavigator";
+import { StartupScreen } from "screens";
 
 const NavigationWrapper = props => {
   const isAuth = useSelector(selectors.isAuth);
+  const triedLogin = useSelector(selectors.getTriedAutoLogin);
 
   return (
     <NavigationContainer>
-      <ProductsNavigator />
+      {isAuth && <ShopNavigator />}
+      {!isAuth && triedLogin && <AuthNavigator />}
+      {!isAuth && !triedLogin && <StartupScreen />}
     </NavigationContainer>
   );
 };

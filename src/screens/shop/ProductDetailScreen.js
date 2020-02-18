@@ -12,8 +12,8 @@ import { useDispatch } from "react-redux";
 import Colors from "colors";
 import { actions } from "store";
 
-const ProductDetailScreen = ({ navigation }) => {
-  const selectedProduct = navigation.getParam("selectedProduct");
+const ProductDetailScreen = ({ navigation, route }) => {
+  const { selectedProduct } = route.params;
   const { imageUrl, price, description } = selectedProduct;
   const dispatch = useDispatch();
 
@@ -36,8 +36,8 @@ const ProductDetailScreen = ({ navigation }) => {
   );
 };
 
-ProductDetailScreen.navigationOptions = ({ navigation }) => {
-  const selectedProduct = navigation.getParam("selectedProduct");
+ProductDetailScreen.screenOptions = ({ route }) => {
+  const { selectedProduct } = route.params;
   return { headerTitle: selectedProduct.title };
 };
 

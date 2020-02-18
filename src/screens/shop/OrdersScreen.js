@@ -38,7 +38,7 @@ const OrdersScreen = () => {
   );
 };
 
-OrdersScreen.navigationOptions = ({ navigation }) => ({
+OrdersScreen.screenOptions = ({ navigation }) => ({
   headerTitle: "Your Orders",
   headerLeft: () => (
     <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>

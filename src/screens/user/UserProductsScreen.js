@@ -26,7 +26,7 @@ const UserProductsScreen = ({ navigation }) => {
   };
 
   const editHandler = productId => {
-    navigation.navigate({ routeName: "EditProduct", params: { productId } });
+    navigation.navigate("EditProduct", { productId });
   };
   return (
     <FlatList
@@ -52,7 +52,7 @@ const UserProductsScreen = ({ navigation }) => {
   );
 };
 
-UserProductsScreen.navigationOptions = ({ navigation }) => ({
+UserProductsScreen.screenOptions = ({ navigation }) => ({
   headerTitle: "Your Products",
   headerLeft: () => (
     <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>

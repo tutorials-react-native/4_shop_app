@@ -33,8 +33,8 @@ const ProductsOverviewScreen = ({ navigation }) => {
   }, [dispatch, setIsLoading]);
 
   useEffect(() => {
-    const focusListener = navigation.addListener("willFocus", loadProducts);
-    return () => focusListener;
+    const unSubscribe = navigation.addListener("focus", loadProducts);
+    return () => unSubscribe;
   });
 
   useEffect(() => {
@@ -45,11 +45,8 @@ const ProductsOverviewScreen = ({ navigation }) => {
   }, [dispatch, loadProducts]);
 
   const detailViewHandler = selectedProduct => {
-    navigation.navigate({
-      routeName: "ProductDetail",
-      params: {
-        selectedProduct
-      }
+    navigation.navigate("ProductDetail", {
+      selectedProduct
     });
   };
 
@@ -108,7 +105,7 @@ const ProductsOverviewScreen = ({ navigation }) => {
   );
 };
 
-export const screenOptions = ({ navigation }) => ({
+ProductsOverviewScreen.screenOptions = ({ navigation }) => ({
   headerTitle: "All Products",
   headerLeft: () => (
     <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
